@@ -1,0 +1,71 @@
+name: API Test & Deploy
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # 每天凌晨2点运行测试
+    - cron: '0 2 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run API tests
+      run: |
+        python -m pytest --html=test_report.html --self-contained-html
+        python -m pytest --alluredir=allure-results
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: |
+          test_report.html
+          allure-results/
+          
+    - name: Check API availability
+      run: |
+        python -c "
+        from utils.api_validator import is_api_available
+        if not is_api_available():
+            print('❌ API不可用')
+            exit(1)
+        else:
+            print('✅ API可用')
+        "
+        
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to staging
+      run: |
+        echo "🚀 部署到测试环境"
+        # 这里添加你的部署脚本
+        # 例如: docker build -t kiosk-api .
+        # 例如: docker push your-registry/kiosk-api
+        
+    - name: Notify deployment
+      run: |
+        echo "📧 发送部署通知"
+        # 这里添加通知逻辑
+        # 例如: 发送Slack/钉钉通知 
