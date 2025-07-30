@@ -15,6 +15,52 @@
 - **参数化测试**: 支持多种测试数据
 - **API状态检查**: 自动检测API可用性
 - **自动检测和部署**: 支持自动监控和部署
+- **一键配置**: 支持其他Mac设备快速部署
+
+## 🎯 一键配置 (适用于其他Mac设备)
+
+### 快速开始
+
+在其他Mac设备上，只需运行以下命令即可完成所有配置：
+
+```bash
+# 下载一键配置脚本
+curl -fsSL https://raw.githubusercontent.com/Peter2025-QA/Kiosk-WebAPI--Monitor/main/scripts/setup.sh | bash
+
+# 或者克隆项目后运行
+git clone https://github.com/Peter2025-QA/Kiosk-WebAPI--Monitor.git
+cd Kiosk-WebAPI--Monitor
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+```
+
+### 一键配置功能
+
+- ✅ **自动安装Homebrew** - 包管理器
+- ✅ **自动安装Python 3.11** - 使用pyenv管理
+- ✅ **自动安装Git** - 版本控制
+- ✅ **自动克隆项目** - 从GitHub获取
+- ✅ **自动安装依赖** - Python包管理
+- ✅ **自动配置环境** - 权限和目录设置
+- ✅ **自动验证安装** - 运行测试检查
+
+### 配置完成后
+
+安装完成后，你可以直接使用以下命令：
+
+```bash
+# 测试监控功能
+python3 scripts/test_monitor.py
+
+# 启动自动监控
+python3 scripts/monitor_api.py
+
+# 运行所有测试
+python3 -m pytest
+
+# 一键部署
+./scripts/deploy.sh
+```
 
 ## 🎯 自动检测和部署
 
